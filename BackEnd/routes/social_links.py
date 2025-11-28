@@ -1,0 +1,68 @@
+from fastapi import APIRouter, HTTPException, Depends, Query
+from sqlalchemy.orm import Session
+from typing import List
+from database import get_db
+from models import SocialLink
+from schemas import SocialLinkCreate, SocialLinkResponse
+from auth import get_token_data, get_user_id_from_token
+
+router = APIRouter()
+
+@router.get("/api/social-links", response_model=List[SocialLinkResponse])
+async def get_social_links(
+    profile_id: str = Query(...),
+    db: Session = Depends(get_db),
+    token_data: dict = Depends(get_token_data)
+):
+    links = db.query(SocialLink).filter(SocialLink.profile_id == profile_id).all()
+    return links
+
+@router.post("/api/social-links", response_model=SocialLinkResponse)
+async def create_social_link(
+    link: SocialLinkCreate,
+    db: Session = Depends(get_db),
+    token_data: dict = Depends(get_token_data)
+):
+    user_id = get_user_id_from_token(token_data)
+    
+    db_link = SocialLink(
+        profile_id=user_id,
+        platform=link.platform,
+        url=link.url
+    )
+    db.add(db_link)
+    db.commit()
+    db.refresh(db_link)
+    return db_link
+
+@router.put("/api/social-links/{link_id}", response_model=SocialLinkResponse)
+async def update_social_link(
+    link_id: int,
+    link: SocialLinkCreate,
+    db: Session = Depends(get_db),
+    token_data: dict = Depends(get_token_data)
+):
+    db_link = db.query(SocialLink).filter(SocialLink.id == link_id).first()
+    if not db_link:
+        raise HTTPException(status_code=404, detail="Social link not found")
+    
+    db_link.platform = link.platform
+    db_link.url = link.url
+    
+    db.commit()
+    db.refresh(db_link)
+    return db_link
+
+@router.delete("/api/social-links/{link_id}")
+async def delete_social_link(
+    link_id: int,
+    db: Session = Depends(get_db),
+    token_data: dict = Depends(get_token_data)
+):
+    db_link = db.query(SocialLink).filter(SocialLink.id == link_id).first()
+    if not db_link:
+        raise HTTPException(status_code=404, detail="Social link not found")
+    
+    db.delete(db_link)
+    db.commit()
+    return {"message": "Social link deleted"}

@@ -1,17 +1,29 @@
-
-import { useAuth } from '../context/AuthContext';
-import { Navigate, Outlet } from 'react-router-dom';
+import { useAuth } from "../context/AuthContext";
+import { Navigate, Outlet } from "react-router-dom";
 
 const ProtectedRoute = () => {
-  const { session, loading } = useAuth();
+  const { isAuthenticated, isLoading } = useAuth();
 
-  if (loading) {
-    return <div>Loading...</div>;
+  // Show loading while Auth0 is checking authentication
+  if (isLoading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "100vh",
+        }}>
+        Loading...
+      </div>
+    );
   }
 
-  if (!session) {
+  // Only redirect if we're sure user is not authenticated
+  if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
   }
+
   return <Outlet />;
 };
 

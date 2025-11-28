@@ -1,4 +1,4 @@
-import { supabase } from "../supabaseClient";
+import authService from "./AuthService";
 import type {
   Profile,
   Service,
@@ -6,214 +6,159 @@ import type {
   Project,
 } from "../types/DatabaseTypes";
 
+const API_URL = "http://localhost:8000";
+
 class DataService {
+  private async authFetch(endpoint: string, options: RequestInit = {}) {
+    // Don't send token in header - backend will read from cookie
+    const res = await fetch(`${API_URL}${endpoint}`, {
+      ...options,
+      headers: {
+        ...options.headers,
+        "Content-Type": "application/json",
+      },
+      credentials: "include", // Add this - removes Authorization header
+    });
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({ message: res.statusText }));
+      throw new Error(error.message || `HTTP error! status: ${res.status}`);
+    }
+
+    return res.json();
+  }
+
   // --- Profile Operations ---
 
-  async getProfile(userId: string) {
-    const { data, error } = await supabase
-      .from("Profile")
-      .select("*")
-      .eq("id", userId)
-      .maybeSingle();
-
-    if (error) throw error;
-    return data as Profile | null;
+  async getProfile(userId: string): Promise<Profile | null> {
+    return this.authFetch(`/api/profile/${userId}`);
   }
 
-  async updateProfile(userId: string, updates: Partial<Profile>) {
-    const { data, error } = await supabase
-      .from("Profile")
-      .update(updates)
-      .eq("id", userId)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data as Profile;
+  async updateProfile(
+    userId: string,
+    updates: Partial<Profile>
+  ): Promise<Profile> {
+    return this.authFetch(`/api/profile/${userId}`, {
+      method: "PUT",
+      body: JSON.stringify(updates),
+    });
   }
 
-  async upsertProfile(profile: Profile) {
-    const { data, error } = await supabase
-      .from("Profile")
-      .upsert(profile)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data as Profile;
+  async upsertProfile(profile: Profile): Promise<Profile> {
+    return this.authFetch("/api/profile", {
+      method: "POST",
+      body: JSON.stringify(profile),
+    });
   }
-  // Add this method to the DataService class
 
   async uploadAvatar(userId: string, file: File): Promise<string> {
-    try {
-      // Create a unique file name
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${userId}/${Date.now()}.${fileExt}`;
+    const formData = new FormData();
+    formData.append("file", file);
 
-      // Upload file to Supabase Storage
-      const { data, error } = await supabase.storage
-        .from("avatars")
-        .upload(fileName, file, {
-          cacheControl: "3600",
-          upsert: true,
-        });
+    const token = await authService.getToken();
+    const res = await fetch(`${API_URL}/api/profile/${userId}/avatar`, {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    });
 
-      if (error) throw error;
-
-      // Get public URL
-      const {
-        data: { publicUrl },
-      } = supabase.storage.from("avatars").getPublicUrl(fileName);
-
-      return publicUrl;
-    } catch (error) {
-      console.error("Error uploading avatar:", error);
-      throw error;
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({ message: res.statusText }));
+      throw new Error(error.message || `HTTP error! status: ${res.status}`);
     }
+
+    const data = await res.json();
+    return data.avatarUrl;
   }
 
   async deleteAvatar(avatarUrl: string): Promise<void> {
-    try {
-      // Extract file path from URL
-      const urlParts = avatarUrl.split("/avatars/");
-      if (urlParts.length < 2) return;
-
-      const filePath = urlParts[1];
-
-      const { error } = await supabase.storage
-        .from("avatars")
-        .remove([filePath]);
-
-      if (error) throw error;
-    } catch (error) {
-      console.error("Error deleting avatar:", error);
-      throw error;
-    }
+    return this.authFetch("/api/profile/avatar", {
+      method: "DELETE",
+      body: JSON.stringify({ avatarUrl }),
+    });
   }
 
   // --- Services Operations ---
 
-  async getServices(userId: string) {
-    const { data, error } = await supabase
-      .from("Services")
-      .select("*")
-      .eq("profile_id", userId)
-      .order("sort_order", { ascending: true });
-
-    if (error) throw error;
-    return data as Service[];
+  async getServices(userId: string): Promise<Service[]> {
+    return this.authFetch(`/api/services?profile_id=${userId}`);
   }
 
-  async createService(service: Omit<Service, "id">) {
-    const { data, error } = await supabase
-      .from("Services")
-      .insert(service)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data as Service;
+  async createService(service: Omit<Service, "id">): Promise<Service> {
+    return this.authFetch("/api/services", {
+      method: "POST",
+      body: JSON.stringify(service),
+    });
   }
 
-  async updateService(id: number, updates: Partial<Service>) {
-    const { data, error } = await supabase
-      .from("Services")
-      .update(updates)
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data as Service;
+  async updateService(id: number, updates: Partial<Service>): Promise<Service> {
+    return this.authFetch(`/api/services/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(updates),
+    });
   }
 
-  async deleteService(id: number) {
-    const { error } = await supabase.from("Services").delete().eq("id", id);
-
-    if (error) throw error;
+  async deleteService(id: number): Promise<void> {
+    return this.authFetch(`/api/services/${id}`, {
+      method: "DELETE",
+    });
   }
 
   // --- SocialLinks Operations ---
 
-  async getSocialLinks(userId: string) {
-    const { data, error } = await supabase
-      .from("SocialLinks")
-      .select("*")
-      .eq("profile_id", userId);
-
-    if (error) throw error;
-    return data as SocialLink[];
+  async getSocialLinks(userId: string): Promise<SocialLink[]> {
+    return this.authFetch(`/api/social-links?profile_id=${userId}`);
   }
 
-  async createSocialLink(link: Omit<SocialLink, "id">) {
-    const { data, error } = await supabase
-      .from("SocialLinks")
-      .insert(link)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data as SocialLink;
+  async createSocialLink(link: Omit<SocialLink, "id">): Promise<SocialLink> {
+    return this.authFetch("/api/social-links", {
+      method: "POST",
+      body: JSON.stringify(link),
+    });
   }
 
-  async updateSocialLink(id: number, updates: Partial<SocialLink>) {
-    const { data, error } = await supabase
-      .from("SocialLinks")
-      .update(updates)
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data as SocialLink;
+  async updateSocialLink(
+    id: number,
+    updates: Partial<SocialLink>
+  ): Promise<SocialLink> {
+    return this.authFetch(`/api/social-links/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(updates),
+    });
   }
 
-  async deleteSocialLink(id: number) {
-    const { error } = await supabase.from("SocialLinks").delete().eq("id", id);
-
-    if (error) throw error;
+  async deleteSocialLink(id: number): Promise<void> {
+    return this.authFetch(`/api/social-links/${id}`, {
+      method: "DELETE",
+    });
   }
 
   // --- Projects Operations ---
 
-  async getProjects(userId: string) {
-    const { data, error } = await supabase
-      .from("Projects")
-      .select("*")
-      .eq("profile_id", userId)
-      .order("sort_order", { ascending: true });
-
-    if (error) throw error;
-    return data as Project[];
+  async getProjects(userId: string): Promise<Project[]> {
+    return this.authFetch(`/api/projects?profile_id=${userId}`);
   }
 
-  async createProject(project: Omit<Project, "id">) {
-    const { data, error } = await supabase
-      .from("Projects")
-      .insert(project)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data as Project;
+  async createProject(project: Omit<Project, "id">): Promise<Project> {
+    return this.authFetch("/api/projects", {
+      method: "POST",
+      body: JSON.stringify(project),
+    });
   }
 
-  async updateProject(id: number, updates: Partial<Project>) {
-    const { data, error } = await supabase
-      .from("Projects")
-      .update(updates)
-      .eq("id", id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data as Project;
+  async updateProject(id: number, updates: Partial<Project>): Promise<Project> {
+    return this.authFetch(`/api/projects/${id}`, {
+      method: "PUT",
+      body: JSON.stringify(updates),
+    });
   }
 
-  async deleteProject(id: number) {
-    const { error } = await supabase.from("Projects").delete().eq("id", id);
-
-    if (error) throw error;
+  async deleteProject(id: number): Promise<void> {
+    return this.authFetch(`/api/projects/${id}`, {
+      method: "DELETE",
+    });
   }
 }
 
