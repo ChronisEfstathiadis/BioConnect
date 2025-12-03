@@ -5,7 +5,7 @@ import {
   createProject,
   deleteProject,
   updateProject,
-} from "../../../api/Projects/Projects";
+} from "../../../api/Projects";
 import { Modal } from "../../Modal/Modal";
 import styles from "./Projects.module.css";
 import { ModalForm } from "./ModalForm";
@@ -67,7 +67,7 @@ export const Projects = ({ profile_id }: { profile_id: string }) => {
     await handleAddProject(newProject);
   };
 
-  const handleDeleteProject = async (id: string) => {
+  const handleDeleteProject = async (id: number) => {
     try {
       await deleteProject(id);
       setProjects(projects.filter((project) => project.id !== id));
@@ -118,7 +118,7 @@ export const Projects = ({ profile_id }: { profile_id: string }) => {
                   </button>
                   <button
                     className={styles.deleteButton}
-                    onClick={() => handleDeleteProject(String(project?.id))}>
+                    onClick={() => handleDeleteProject(project?.id || 0)}>
                     Delete
                   </button>
                 </div>

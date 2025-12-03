@@ -1,5 +1,5 @@
-import { API_URL } from "../../config/api";
-import type { Project } from "../../types/ProjectsTypes";
+import { API_URL } from "../config/api";
+import type { Project } from "../types/ProjectsTypes";
 
 export const getProjects = async (profile_id: string) => {
   console.log("profile_id", profile_id);
@@ -58,7 +58,7 @@ export const updateProject = async (project: Project) => {
   return data;
 };
 
-export const deleteProject = async (id: string) => {
+export const deleteProject = async (id: number) => {
   const response = await fetch(`${API_URL}/projects/${id}`, {
     method: "DELETE",
     credentials: "include",

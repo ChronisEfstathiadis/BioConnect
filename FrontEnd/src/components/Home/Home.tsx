@@ -3,7 +3,7 @@ import type { Profile } from "../../types/ProfileTypes";
 import styles from "./Home.module.css";
 import LeftView from "./LeftView/LeftView";
 import { useAuth } from "../../context/AuthContext";
-import { getProfile } from "../../api/Profile/Profile";
+import { getProfile } from "../../api/Profile";
 import RightView from "./RightView/RightView";
 
 export default function Home() {

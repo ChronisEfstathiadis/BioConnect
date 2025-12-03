@@ -11,9 +11,9 @@ import {
   FaPhone,
 } from "react-icons/fa";
 import { IoPersonSharp } from "react-icons/io5";
-import { DeleteProfile } from "../../../api/Profile/Profile";
-import { uploadAvatar } from "../../../api/Profile/Profile";
-import { updateProfile } from "../../../api/Profile/Profile";
+import { DeleteProfile } from "../../../api/Profile";
+import { uploadAvatar } from "../../../api/Profile";
+import { updateProfile } from "../../../api/Profile";
 import type { Profile } from "../../../types/ProfileTypes";
 import { Projects } from "../Projects/Projects";
 
