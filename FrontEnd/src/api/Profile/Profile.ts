@@ -2,7 +2,7 @@ import { API_URL } from "../../config/api";
 import type { Profile } from "../../types/ProfileTypes";
 
 export const getProfile = async () => {
-  const response = await fetch(`${API_URL}/api/profile/me`, {
+  const response = await fetch(`${API_URL}/profile/me`, {
     method: "GET",
     credentials: "include",
   });
@@ -18,7 +18,7 @@ export const getProfile = async () => {
 };
 
 export const getProfileById = async (id: string) => {
-  const response = await fetch(`${API_URL}/api/profile/${id}`, {
+  const response = await fetch(`${API_URL}/profile/${id}`, {
     method: "GET",
     credentials: "include",
   });
@@ -37,7 +37,7 @@ export const createProfile = async (profileData: {
   phone?: string;
   avatar_url?: string;
 }) => {
-  const response = await fetch(`${API_URL}/api/profile`, {
+  const response = await fetch(`${API_URL}/profile`, {
     method: "POST",
     credentials: "include",
     headers: {
@@ -58,7 +58,7 @@ export const createProfile = async (profileData: {
 
 export const DeleteProfile = async (id: string) => {
   console.log("Deleting profile with ID:", id);
-  const response = await fetch(`${API_URL}/api/profile/${id}`, {
+  const response = await fetch(`${API_URL}/profile/${id}`, {
     method: "DELETE",
     credentials: "include",
   });
@@ -77,7 +77,7 @@ export const uploadAvatar = async (userId: string, file: File) => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch(`${API_URL}/api/profile/${userId}/avatar`, {
+  const response = await fetch(`${API_URL}/profile/${userId}/avatar`, {
     method: "POST",
     credentials: "include",
     body: formData,
@@ -93,7 +93,7 @@ export const uploadAvatar = async (userId: string, file: File) => {
 };
 
 export const updateProfile = async (id: string, updates: Partial<Profile>) => {
-  const response = await fetch(`${API_URL}/api/profile/${id}`, {
+  const response = await fetch(`${API_URL}/profile/${id}`, {
     method: "PUT",
     credentials: "include",
     headers: {

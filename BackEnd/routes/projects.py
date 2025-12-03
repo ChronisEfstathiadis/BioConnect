@@ -19,16 +19,17 @@ async def get_projects(
 
 @router.post("/api/projects", response_model=ProjectResponse, tags=["Projects"])
 async def create_project(
-    profile_id: str,
-    project: ProjectCreate,
+    project: ProjectCreate,  # Remove profile_id parameter
     db: Session = Depends(get_db),
     token_data: dict = Depends(get_token_data)
 ):
+    user_id = get_user_id_from_token(token_data)  # Get profile_id from token
+    
     db_project = Project(
-        profile_id=profile_id,
+        profile_id=user_id,  # Use user_id from token
         title=project.title,
         description=project.description,
-        project_url=project.project_url,
+        project_link=project.project_link,  # Change project_url to project_link
         sort_order=project.sort_order or 0
     )
     db.add(db_project)
@@ -49,7 +50,7 @@ async def update_project(
     
     db_project.title = project.title
     db_project.description = project.description
-    db_project.project_url = project.project_url
+    db_project.project_link = project.project_link  # Change project_url to project_link
     db_project.sort_order = project.sort_order or 0
     
     db.commit()

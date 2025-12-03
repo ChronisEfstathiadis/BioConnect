@@ -324,14 +324,8 @@ export default function LeftView({ profile, onProfileUpdate }: LeftViewProps) {
           </button>
         </div>
       </div>
-
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>Projects</h2>
-        <button className={styles.addButton}>+ Add Project</button>
-
-        <div className={styles.projectsList}>
-          <Projects profile_id={profile?.id as string} />
-        </div>
+      <div className={styles.projectsList}>
+        <Projects profile_id={profile?.id as string} />
       </div>
     </div>
   );

@@ -16,18 +16,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
 
-  // Check authentication status on mount and when needed
   useEffect(() => {
     const checkAuth = async () => {
       try {
-        const response = await fetch(`${API_URL}/api/protected`, {
+        const response = await fetch(`${API_URL}/protected`, {
           credentials: "include",
         });
 
         if (response.ok) {
           const data = await response.json();
           setIsAuthenticated(true);
-          setUser(data.user); // User info from token
+          setUser(data.user);
         } else {
           setIsAuthenticated(false);
           setUser(null);
@@ -44,13 +43,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const loginWithRedirect = () => {
-    // Redirect to backend login endpoint
-    window.location.href = `${API_URL}/api/auth/login`;
+    window.location.href = `${API_URL}/auth/login`;
   };
 
   const logout = async () => {
-    // Call backend logout to clear cookie
-    await fetch(`${API_URL}/api/auth/logout`, {
+    await fetch(`${API_URL}/auth/logout`, {
       method: "DELETE",
       credentials: "include",
     });

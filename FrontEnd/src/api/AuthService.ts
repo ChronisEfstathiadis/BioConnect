@@ -19,16 +19,16 @@ class AuthService {
   }
 
   async getProtected() {
-    return this.authFetch(`${API_URL}/api/protected`);
+    return this.authFetch(`${API_URL}/protected`);
   }
 
   async getUsers() {
-    return this.authFetch(`${API_URL}/api/users`);
+    return this.authFetch(`${API_URL}/users`);
   }
 }
 
 export const logout = async () => {
-  await fetch(`${API_URL}/api/auth/logout`, {
+  await fetch(`${API_URL}/auth/logout`, {
     method: "DELETE",
     credentials: "include",
   });

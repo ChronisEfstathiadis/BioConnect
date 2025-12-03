@@ -16,7 +16,6 @@ export default function Home() {
         try {
           const profile = await getProfile();
           setProfile(profile);
-          console.log("Profile:", profile);
         } catch (error) {
           console.error("Error:", error);
         }
