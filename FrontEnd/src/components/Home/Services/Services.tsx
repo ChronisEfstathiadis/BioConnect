@@ -7,7 +7,7 @@ import {
 } from "../../../api/Services";
 import type { Service } from "../../../types/ServicesTypes";
 import { Modal } from "../../Modal/Modal";
-import { ModalForm } from "../Projects/ModalForm";
+import { ModalForm } from "./ModalForm";
 import styles from "./Services.module.css";
 
 export const Services = ({ profile_id }: { profile_id: string }) => {

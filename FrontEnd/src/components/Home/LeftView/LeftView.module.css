@@ -223,6 +223,20 @@
   opacity: 0.6;
 }
 
+.activityContainer {
+  display: flex;
+  flex-direction: row;
+  gap: 1.5rem;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px var(--shadow);
+}
+
 .cancelButton {
   background: transparent;
   color: var(--text-secondary);

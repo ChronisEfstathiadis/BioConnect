@@ -16,6 +16,7 @@ import { uploadAvatar } from "../../../api/Profile";
 import { updateProfile } from "../../../api/Profile";
 import type { Profile } from "../../../types/ProfileTypes";
 import { Projects } from "../Projects/Projects";
+import { Services } from "../Services/Services";
 
 interface LeftViewProps {
   profile: Profile | null;
@@ -324,8 +325,13 @@ export default function LeftView({ profile, onProfileUpdate }: LeftViewProps) {
           </button>
         </div>
       </div>
-      <div className={styles.projectsList}>
-        <Projects profile_id={profile?.id as string} />
+      <div className={styles.activityContainer}>
+        <div className={styles.projectsList}>
+          <Projects profile_id={profile?.id as string} />
+        </div>
+        <div className={styles.servicesList}>
+          <Services profile_id={profile?.id as string} />
+        </div>
       </div>
     </div>
   );
