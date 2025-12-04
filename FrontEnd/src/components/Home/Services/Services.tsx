@@ -5,7 +5,7 @@ import {
   updateService,
   deleteService,
 } from "../../../api/Services";
-import type { Service } from "../../../types/ServicesTypes";
+import type { Service } from "../../../Types/ServicesTypes";
 import { Modal } from "../../Modal/Modal";
 import { ModalForm } from "./ModalForm";
 import styles from "./Services.module.css";

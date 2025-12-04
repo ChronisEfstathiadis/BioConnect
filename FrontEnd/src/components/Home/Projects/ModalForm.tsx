@@ -11,7 +11,7 @@ export const ModalForm = ({
   onSubmit,
   setIsModalOpen,
 }: {
-  onSubmit: (formData: FormData) => void; // ✅ Change to accept formData
+  onSubmit: (formData: FormData) => void;
   setIsModalOpen: (isOpen: boolean) => void;
 }) => {
   const [formData, setFormData] = useState<FormData>({
@@ -91,7 +91,7 @@ export const ModalForm = ({
             type="button"
             onClick={() => {
               setIsModalOpen(false);
-              setFormData({ title: "", description: "", project_link: "" }); // Reset form
+              setFormData({ title: "", description: "", project_link: "" });
             }}
             className={styles.cancelButton}>
             Cancel

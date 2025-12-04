@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import type { Profile } from "../../types/ProfileTypes";
+import type { Profile } from "../../Types/ProfileTypes";
 import styles from "./Home.module.css";
 import LeftView from "./LeftView/LeftView";
 import { useAuth } from "../../context/AuthContext";

@@ -1,5 +1,5 @@
 import styles from "./RightView.module.css";
-import type { Profile } from "../../../types/ProfileTypes";
+import type { Profile } from "../../../Types/ProfileTypes";
 import { IoPersonSharp } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 

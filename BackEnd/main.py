@@ -7,7 +7,7 @@ from fastapi.exceptions import RequestValidationError
 from sqlalchemy.exc import SQLAlchemyError
 from pathlib import Path
 from database import init_db
-from routes import auth, profiles, services, social_links, projects, jobs
+from Routes import auth, profiles, services, social_links, projects, jobs
 import traceback
 
 # Initialize database

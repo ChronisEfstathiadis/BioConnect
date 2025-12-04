@@ -1,4 +1,4 @@
-import type { Service } from "../types/ServicesTypes";
+import type { Service } from "../Types/ServicesTypes";
 import { API_URL } from "../config/api";
 
 export const getServices = async (profile_id: string) => {

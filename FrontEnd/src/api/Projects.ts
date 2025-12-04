@@ -1,5 +1,5 @@
 import { API_URL } from "../config/api";
-import type { Project } from "../types/ProjectsTypes";
+import type { Project } from "../Types/ProjectsTypes";
 
 export const getProjects = async (profile_id: string) => {
   console.log("profile_id", profile_id);

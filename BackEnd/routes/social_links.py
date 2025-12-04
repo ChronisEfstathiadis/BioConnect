@@ -8,9 +8,9 @@ from auth import get_token_data, get_user_id_from_token
 
 router = APIRouter()
 
-@router.get("/api/social-links", response_model=List[SocialLinkResponse], tags=["Social Links"])
+@router.get("/api/social-links/{profile_id}", response_model=List[SocialLinkResponse], tags=["Social Links"])
 async def get_social_links(
-    profile_id: str = Query(...),
+    profile_id: str,
     db: Session = Depends(get_db),
     token_data: dict = Depends(get_token_data)
 ):
@@ -23,8 +23,8 @@ async def create_social_link(
     db: Session = Depends(get_db),
     token_data: dict = Depends(get_token_data)
 ):
+
     user_id = get_user_id_from_token(token_data)
-    
     db_link = SocialLink(
         profile_id=user_id,
         platform=link.platform,

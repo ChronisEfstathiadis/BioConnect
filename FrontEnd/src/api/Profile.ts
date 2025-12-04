@@ -1,5 +1,5 @@
 import { API_URL } from "../config/api";
-import type { Profile } from "../types/ProfileTypes";
+import type { Profile } from "../Types/ProfileTypes";
 
 export const getProfile = async () => {
   const response = await fetch(`${API_URL}/profile/me`, {

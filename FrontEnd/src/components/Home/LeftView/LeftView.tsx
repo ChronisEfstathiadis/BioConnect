@@ -14,9 +14,10 @@ import { IoPersonSharp } from "react-icons/io5";
 import { DeleteProfile } from "../../../api/Profile";
 import { uploadAvatar } from "../../../api/Profile";
 import { updateProfile } from "../../../api/Profile";
-import type { Profile } from "../../../types/ProfileTypes";
+import type { Profile } from "../../../Types/ProfileTypes";
 import { Projects } from "../Projects/Projects";
 import { Services } from "../Services/Services";
+import { SocialLinks } from "../SocialLinks/SocialLinks";
 
 interface LeftViewProps {
   profile: Profile | null;
@@ -331,6 +332,9 @@ export default function LeftView({ profile, onProfileUpdate }: LeftViewProps) {
         </div>
         <div className={styles.servicesList}>
           <Services profile_id={profile?.id as string} />
+        </div>
+        <div className={styles.socialLinksList}>
+          <SocialLinks profile_id={profile?.id as string} />
         </div>
       </div>
     </div>
