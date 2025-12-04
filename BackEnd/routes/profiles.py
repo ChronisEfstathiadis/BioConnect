@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Depends, File, UploadFile, status
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from pathlib import Path
 import shutil
 import uuid
@@ -43,18 +43,21 @@ async def get_my_profile(
 @router.get("/api/profile/{profile_id}", response_model=ProfileResponse, tags=["Profiles"])
 async def get_profile(
     profile_id: str,
-    db: Session = Depends(get_db),
-    token_data: dict = Depends(get_token_data)
+    db: Session = Depends(get_db)
 ):
+    """Get profile by ID - public endpoint, no authentication required. Returns profile with all related data."""
     try:
-        user_id = get_user_id_from_token(token_data)
-        if profile_id != user_id:
-            raise HTTPException(
-                status_code=status.HTTP_403_FORBIDDEN,
-                detail="You are not authorized to view this profile"
-            )
+        # Use joinedload to eagerly load all relationships
+        profile = db.query(Profile)\
+            .options(
+                joinedload(Profile.jobs),
+                joinedload(Profile.services),
+                joinedload(Profile.projects),
+                joinedload(Profile.social_links)
+            )\
+            .filter(Profile.id == profile_id)\
+            .first()
         
-        profile = db.query(Profile).filter(Profile.id == profile_id).first()
         if not profile:
             raise HTTPException(
                 status_code=status.HTTP_404_NOT_FOUND,

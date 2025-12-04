@@ -18,6 +18,7 @@ import type { Profile } from "../../../Types/ProfileTypes";
 import { Projects } from "../Projects/Projects";
 import { Services } from "../Services/Services";
 import { SocialLinks } from "../SocialLinks/SocialLinks";
+import { Jobs } from "../Job/Job";
 
 interface LeftViewProps {
   profile: Profile | null;
@@ -335,6 +336,9 @@ export default function LeftView({ profile, onProfileUpdate }: LeftViewProps) {
         </div>
         <div className={styles.socialLinksList}>
           <SocialLinks profile_id={profile?.id as string} />
+        </div>
+        <div className={styles.jobsList}>
+          <Jobs profile_id={profile?.id as string} />
         </div>
       </div>
     </div>

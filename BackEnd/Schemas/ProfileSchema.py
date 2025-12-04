@@ -1,6 +1,10 @@
 from pydantic import BaseModel
-from typing import Optional
+from typing import Optional, List
 from datetime import datetime
+from Schemas.JobSchema import JobsResponse
+from Schemas.ServiceSchema import ServiceResponse
+from Schemas.ProjectSchema import ProjectResponse
+from Schemas.SocialLinksSchema import SocialLinkResponse
 
 
 class ProfileBase(BaseModel):
@@ -16,6 +20,10 @@ class ProfileCreate(ProfileBase):
 class ProfileResponse(ProfileBase):
     id: str
     created_at: Optional[datetime] = None
+    jobs: Optional[List[JobsResponse]] = []
+    services: Optional[List[ServiceResponse]] = []
+    projects: Optional[List[ProjectResponse]] = []
+    social_links: Optional[List[SocialLinkResponse]] = []
     
     class Config:
         from_attributes = True

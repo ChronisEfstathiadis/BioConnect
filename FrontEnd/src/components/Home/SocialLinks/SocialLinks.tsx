@@ -9,6 +9,8 @@ import type { SocialLinksTypes } from "../../../Types/SocialLinksTypes";
 import { Modal } from "../../Modal/Modal";
 import { ModalForm } from "./ModalForm";
 import styles from "./SocialLinks.module.css";
+import { PlatformIcons } from "./PlatformIcons";
+import { FaEdit, FaTrash } from "react-icons/fa";
 
 export const SocialLinks = ({ profile_id }: { profile_id: string }) => {
   const [socialLinks, setSocialLinks] = useState<SocialLinksTypes[]>([]);
@@ -98,20 +100,28 @@ export const SocialLinks = ({ profile_id }: { profile_id: string }) => {
               <div
                 key={String(socialLink?.id)}
                 className={styles.socialLinkItem}>
-                <h3>{socialLink?.platform || "Untitled"}</h3>
-                <p>{socialLink?.url || ""}</p>
-                <div className={styles.socialLinkActions}>
+                <div
+                  className={styles.socialLinkContent}
+                  onClick={() => window.open(socialLink?.url, "_blank")}>
+                  <span className={styles.platformIcon}>
+                    {PlatformIcons[
+                      socialLink?.platform as keyof typeof PlatformIcons
+                    ] || null}
+                  </span>
+                  <h3>{socialLink?.platform || "Untitled"}</h3>
+                </div>
+                <div className={styles.socialLinkActionButtons}>
                   <button
-                    className={styles.editButton}
-                    onClick={() => handleUpdateSocialLink(socialLink)}>
-                    Edit
-                  </button>
-                  <button
-                    className={styles.deleteButton}
+                    className={styles.socialLinkActionButton}
                     onClick={() =>
                       handleDeleteSocialLink(Number(socialLink?.id))
                     }>
-                    Delete
+                    <FaTrash className={styles.deleteIcon} />
+                  </button>
+                  <button
+                    className={styles.socialLinkActionButton}
+                    onClick={() => handleUpdateSocialLink(socialLink)}>
+                    <FaEdit className={styles.editIcon} />
                   </button>
                 </div>
               </div>

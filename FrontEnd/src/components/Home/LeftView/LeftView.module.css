@@ -224,17 +224,21 @@
 }
 
 .activityContainer {
-  display: flex;
-  flex-direction: row;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
   gap: 1.5rem;
-  justify-content: space-between;
-  align-items: flex-start;
   width: 100%;
   background: var(--bg-secondary);
   border-radius: 8px;
   border: 1px solid var(--border);
   padding: 1.5rem;
   box-shadow: 0 2px 8px var(--shadow);
+}
+
+@media (min-width: 768px) {
+  .activityContainer {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 .cancelButton {

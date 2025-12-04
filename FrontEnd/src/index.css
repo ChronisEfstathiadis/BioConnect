@@ -30,6 +30,7 @@
   --shadow: rgba(0, 0, 0, 0.1);
   --shadow-lg: rgba(0, 0, 0, 0.15);
   --danger-hover: #c82333;
+  --link-color-hover: #0b5ed7;
 
   color: var(--text-primary);
   background-color: var(--bg-primary);
@@ -64,6 +65,7 @@
   --shadow: rgba(0, 0, 0, 0.3);
   --shadow-lg: rgba(0, 0, 0, 0.5);
   --danger-hover: #c82333;
+  --link-color-hover: #58a6ff;
 }
 
 * {

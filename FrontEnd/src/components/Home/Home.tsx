@@ -38,9 +38,6 @@ export default function Home() {
       <div className={styles.previewPanel}>
         <div className={styles.previewHeader}>
           <h2>Preview</h2>
-          <span className={styles.previewSubtitle}>
-            How customers will see your profile
-          </span>
         </div>
 
         <RightView profile={profile} />

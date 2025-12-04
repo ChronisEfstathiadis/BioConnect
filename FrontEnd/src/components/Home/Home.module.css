@@ -34,11 +34,6 @@
   margin-bottom: 0.25rem;
 }
 
-.previewSubtitle {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-}
-
 /* Phone Frame */
 .phoneFrame {
   width: 100%;
