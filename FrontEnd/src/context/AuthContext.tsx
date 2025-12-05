@@ -1,5 +1,6 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { API_URL } from "../config/api";
+import { apiFetch, clearRedirectFlag } from "../utils/apiClient";
 
 interface AuthContextType {
   isAuthenticated: boolean;
@@ -18,20 +19,33 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   useEffect(() => {
     const checkAuth = async () => {
+      // Don't check auth if we're on login page
+      if (window.location.pathname === "/login") {
+        setIsAuthenticated(false);
+        setIsLoading(false);
+        // Clear redirect flag when on login page
+        clearRedirectFlag();
+        return;
+      }
+
+      // Clear redirect flag when checking auth (user might have just logged in)
+      clearRedirectFlag();
+
       try {
-        const response = await fetch(`${API_URL}/protected`, {
-          credentials: "include",
-        });
+        const response = await apiFetch("/protected");
 
         if (response.ok) {
           const data = await response.json();
           setIsAuthenticated(true);
           setUser(data.user);
+          // Clear redirect flag on successful auth
+          clearRedirectFlag();
         } else {
           setIsAuthenticated(false);
           setUser(null);
         }
       } catch (error) {
+        console.error("Auth check error:", error);
         setIsAuthenticated(false);
         setUser(null);
       } finally {
@@ -43,6 +57,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   }, []);
 
   const loginWithRedirect = () => {
+    // Clear any existing redirect flag before starting login
+    clearRedirectFlag();
     window.location.href = `${API_URL}/auth/login`;
   };
 
@@ -53,6 +69,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     });
     setIsAuthenticated(false);
     setUser(null);
+    clearRedirectFlag();
     window.location.href = "/login";
   };
 

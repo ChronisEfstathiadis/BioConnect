@@ -35,6 +35,17 @@ async def create_job(
     db.refresh(db_job)
     return db_job
 
+
+@router.get("/api/jobs/{job_id}", response_model=JobsResponse, tags=["Jobs"])
+async def get_job_by_id(
+    job_id: int,
+    db: Session = Depends(get_db)
+):
+    db_job = db.query(Job).filter(Job.id == job_id).first()
+    if not db_job:
+        raise HTTPException(status_code=404, detail="Job not found")
+    return db_job
+
 @router.put("/api/jobs/{job_id}", response_model=JobsResponse, tags=["Jobs"])
 async def update_job(
     job_id: int,

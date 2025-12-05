@@ -149,6 +149,7 @@ async def update_profile(
         db_profile.LastName = profile.LastName
         db_profile.avatar_url = profile.avatar_url
         db_profile.phone = profile.phone
+        db_profile.email = profile.email  # Add this line to update the email
         
         db.commit()
         db.refresh(db_profile)

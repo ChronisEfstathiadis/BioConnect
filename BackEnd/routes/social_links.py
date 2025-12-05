@@ -17,6 +17,18 @@ async def get_social_links(
     links = db.query(SocialLink).filter(SocialLink.profile_id == profile_id).all()
     return links
 
+@router.get("/api/social-links/{link_id}", response_model=SocialLinkResponse, tags=["Social Links"])
+async def get_social_link_by_id(
+    link_id: int,
+    db: Session = Depends(get_db)
+):
+    db_link = db.query(SocialLink).filter(SocialLink.id == link_id).first()
+    if not db_link:
+        raise HTTPException(status_code=404, detail="Social link not found")
+    return db_link
+
+
+
 @router.post("/api/social-links", response_model=SocialLinkResponse, tags=["Social Links"])
 async def create_social_link(
     link: SocialLinkCreate,

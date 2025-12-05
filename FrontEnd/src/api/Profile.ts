@@ -1,10 +1,9 @@
-import { API_URL } from "../config/api";
 import type { Profile } from "../Types/ProfileTypes";
+import { apiFetch } from "../utils/apiClient";
 
 export const getProfile = async () => {
-  const response = await fetch(`${API_URL}/profile/me`, {
+  const response = await apiFetch("/profile/me", {
     method: "GET",
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -18,16 +17,17 @@ export const getProfile = async () => {
 };
 
 export const getProfileById = async (id: string) => {
-  const response = await fetch(`${API_URL}/profile/${id}`, {
+  const response = await apiFetch(`/profile/${id}`, {
     method: "GET",
-    credentials: "include",
   });
+
   if (!response.ok) {
     const error = await response
       .json()
       .catch(() => ({ detail: response.statusText }));
     throw new Error(error.detail || "Failed to get profile");
   }
+
   return response.json() as Promise<Profile>;
 };
 
@@ -37,12 +37,8 @@ export const createProfile = async (profileData: {
   phone?: string;
   avatar_url?: string;
 }) => {
-  const response = await fetch(`${API_URL}/profile`, {
+  const response = await apiFetch("/profile", {
     method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(profileData),
   });
 
@@ -58,9 +54,8 @@ export const createProfile = async (profileData: {
 
 export const DeleteProfile = async (id: string) => {
   console.log("Deleting profile with ID:", id);
-  const response = await fetch(`${API_URL}/profile/${id}`, {
+  const response = await apiFetch(`/profile/${id}`, {
     method: "DELETE",
-    credentials: "include",
   });
 
   if (!response.ok) {
@@ -77,11 +72,12 @@ export const uploadAvatar = async (userId: string, file: File) => {
   const formData = new FormData();
   formData.append("file", file);
 
-  const response = await fetch(`${API_URL}/profile/${userId}/avatar`, {
+  const response = await apiFetch(`/profile/${userId}/avatar`, {
     method: "POST",
-    credentials: "include",
+    headers: {}, // Don't set Content-Type for FormData, browser will set it with boundary
     body: formData,
   });
+
   if (!response.ok) {
     const error = await response
       .json()
@@ -93,14 +89,11 @@ export const uploadAvatar = async (userId: string, file: File) => {
 };
 
 export const updateProfile = async (id: string, updates: Partial<Profile>) => {
-  const response = await fetch(`${API_URL}/profile/${id}`, {
+  const response = await apiFetch(`/profile/${id}`, {
     method: "PUT",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(updates),
   });
+
   if (!response.ok) {
     const error = await response
       .json()

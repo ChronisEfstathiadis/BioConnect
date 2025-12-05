@@ -1,11 +1,10 @@
-import { API_URL } from "../config/api";
 import type { Project } from "../Types/ProjectsTypes";
+import { apiFetch } from "../utils/apiClient";
 
 export const getProjects = async (profile_id: string) => {
   console.log("profile_id", profile_id);
-  const response = await fetch(`${API_URL}/projects/${profile_id}`, {
+  const response = await apiFetch(`/projects/${profile_id}`, {
     method: "GET",
-    credentials: "include",
   });
   if (!response.ok) {
     throw new Error("Failed to fetch projects");
@@ -21,12 +20,8 @@ export const getProjects = async (profile_id: string) => {
 };
 
 export const createProject = async (project: Project) => {
-  const response = await fetch(`${API_URL}/projects`, {
+  const response = await apiFetch("/projects", {
     method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(project),
   });
   if (!response.ok) {
@@ -43,12 +38,8 @@ export const createProject = async (project: Project) => {
 };
 
 export const updateProject = async (project: Project) => {
-  const response = await fetch(`${API_URL}/projects/${project.id}`, {
+  const response = await apiFetch(`/projects/${project.id}`, {
     method: "PUT",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(project),
   });
   if (!response.ok) {
@@ -59,12 +50,21 @@ export const updateProject = async (project: Project) => {
 };
 
 export const deleteProject = async (id: number) => {
-  const response = await fetch(`${API_URL}/projects/${id}`, {
+  const response = await apiFetch(`/projects/${id}`, {
     method: "DELETE",
-    credentials: "include",
   });
   if (!response.ok) {
     throw new Error("Failed to delete project");
   }
   return response.ok;
+};
+
+export const getProjectById = async (id: number): Promise<Project> => {
+  const response = await apiFetch(`/projects/${id}`, {
+    method: "GET",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch project");
+  }
+  return response.json();
 };

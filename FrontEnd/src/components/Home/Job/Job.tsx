@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Modal } from "../../Modal/Modal";
 import styles from "./Job.module.css";
 import { JobModalForm } from "./ModalForm";
-import type { Job } from "../../../Types/JobTypes";
+import type { Job } from "../../../types/JobTypes";
 import { getJobs, createJob, deleteJob, updateJob } from "../../../api/Job";
 export const Jobs = ({ profile_id }: { profile_id: string }) => {
   const [jobs, setJobs] = useState<Job[]>([]);

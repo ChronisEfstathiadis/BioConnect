@@ -1,14 +1,13 @@
 /* Phone Frame */
 .phoneFrame {
-  width: 100%;
-  max-width: 375px;
-  height: 667px;
-  background: var(--bg-primary);
-  border-radius: 36px;
-  box-shadow: 0 8px 32px var(--shadow-lg);
-  border: 12px solid #1f1f1f;
+  width: 320px;
+  height: 640px;
+  background: #1a1a1a;
+  border-radius: 40px;
+  padding: 12px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
   position: relative;
-  overflow: hidden;
+  margin: 0 auto;
 }
 
 .phoneNotch {
@@ -18,40 +17,63 @@
   transform: translateX(-50%);
   width: 150px;
   height: 30px;
-  background: #1f1f1f;
+  background: #1a1a1a;
   border-radius: 0 0 20px 20px;
   z-index: 10;
 }
 
 .phoneContent {
+  width: 100%;
   height: 100%;
+  background: var(--bg-secondary);
+  border-radius: 32px;
   overflow-y: auto;
-  padding: 2rem 1.5rem;
-  padding-top: 3rem;
+  overflow-x: hidden;
+  padding: 1.5rem 0.75rem;
+}
+
+/* Profile Card Styles */
+.profileCard {
+  width: 100%;
   background: var(--bg-primary);
+  border-radius: 12px;
+  box-shadow: 0 4px 12px var(--shadow);
+  overflow: hidden;
+  position: relative;
 }
 
-/* Preview Profile */
-.previewProfile {
-  text-align: center;
-  margin-bottom: 2rem;
+/* Banner */
+.banner {
+  height: 80px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-.previewAvatarWrapper {
+/* Avatar Section */
+.avatarSection {
   display: flex;
   justify-content: center;
-  margin-bottom: 1rem;
+  margin-top: -40px;
+  padding: 0 1rem;
 }
 
-.previewAvatar {
+.avatarWrapper {
+  position: relative;
+  border-radius: 50%;
+  padding: 3px;
+  background: var(--bg-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.avatar {
   width: 80px;
   height: 80px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid var(--accent);
+  display: block;
+  border: 3px solid var(--bg-primary);
 }
 
-.previewAvatarPlaceholder {
+.avatarPlaceholder {
   width: 80px;
   height: 80px;
   border-radius: 50%;
@@ -60,89 +82,227 @@
   align-items: center;
   justify-content: center;
   color: var(--text-tertiary);
-  border: 3px solid var(--border);
+  border: 3px solid var(--bg-primary);
 }
 
-.previewName {
-  font-size: 1.5rem;
+/* Profile Info */
+.profileInfo {
+  padding: 1rem 1.25rem;
+  text-align: center;
+}
+
+.name {
+  font-size: 1.1rem;
   font-weight: 700;
   color: var(--text-primary);
+  margin: 0 0 0.25rem 0;
+  word-break: break-word;
 }
 
-/* Preview Projects */
-.previewProjects {
-  margin-top: 2rem;
+.title {
+  font-size: 0.85rem;
+  color: #667eea;
+  font-weight: 500;
+  margin: 0 0 0.75rem 0;
 }
 
-.previewSectionTitle {
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text-primary);
-  margin-bottom: 1rem;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+/* Contact Info */
+.contactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
 }
 
-.previewProjectCard {
+.contactItem {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: var(--text-secondary);
+  font-size: 0.75rem;
+}
+
+.contactIcon {
+  color: #667eea;
+  font-size: 0.85rem;
+  flex-shrink: 0;
+}
+
+.contactText {
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Social Links */
+.socialLinks {
+  display: flex;
+  justify-content: center;
+  gap: 0.5rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border);
+  flex-wrap: wrap;
+}
+
+.socialLink {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
   background: var(--bg-secondary);
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 1rem;
+  color: var(--text-primary);
+  font-size: 0.9rem;
+  transition: all 0.3s;
+  text-decoration: none;
   border: 1px solid var(--border);
 }
 
-.previewProjectCard h4 {
-  font-size: 1rem;
+.socialLink:hover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.4);
+  border-color: transparent;
+}
+
+/* Sections */
+.section {
+  padding: 1rem 1.25rem;
+  border-top: 1px solid var(--border);
+}
+
+.sectionTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0 0 0.75rem 0;
+  text-align: left;
+}
+
+/* Services List */
+.servicesList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.serviceItem {
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  transition: all 0.3s;
+}
+
+.serviceItem:hover {
+  border-color: #667eea;
+  transform: translateY(-1px);
+}
+
+/* Projects List */
+.projectsList {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.projectItem {
+  padding: 0.75rem;
+  background: var(--bg-secondary);
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  transition: all 0.3s;
+}
+
+.projectItem:hover {
+  border-color: #667eea;
+  transform: translateY(-1px);
+}
+
+.projectHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.projectLink {
+  color: #667eea;
+  font-size: 0.85rem;
+  transition: all 0.3s;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.projectLink:hover {
+  color: #764ba2;
+  transform: scale(1.1);
+}
+
+/* Item Styles */
+.itemTitle {
+  font-size: 0.85rem;
   font-weight: 600;
   color: var(--text-primary);
-  margin-bottom: 0.5rem;
+  margin: 0 0 0.25rem 0;
 }
 
-.previewProjectCard p {
-  font-size: 0.875rem;
+.itemDescription {
+  font-size: 0.75rem;
   color: var(--text-secondary);
-  margin-bottom: 0.75rem;
-  line-height: 1.5;
+  margin: 0;
+  line-height: 1.4;
+  white-space: pre-wrap;
 }
 
-.previewLink {
-  display: inline-flex;
-  align-items: center;
-  color: var(--accent);
-  font-size: 0.875rem;
-  font-weight: 600;
-  text-decoration: none;
-  transition: all 0.2s;
-}
-
-.previewLink:hover {
-  color: var(--accent-hover);
-  transform: translateX(2px);
-}
-
+/* Preview Link Button */
 .previewLinkContainer {
-  display: flex;
-  justify-content: center;
   margin-top: 2rem;
+  text-align: center;
 }
 
 .previewLinkButton {
-  background: var(--accent);
-  color: var(--text-primary);
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  padding: 0.875rem 2rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
   border: none;
-  cursor: pointer;
-  transition: all 0.2s;
-  font-size: 0.875rem;
+  border-radius: 12px;
   font-weight: 600;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  transition: all 0.2s;
-  transition: all 0.2s;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
+
 .previewLinkButton:hover {
-  background: var(--accent-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+}
+
+.previewLinkButton:active {
+  transform: translateY(0);
+}
+
+/* Scrollbar Styling */
+.phoneContent::-webkit-scrollbar {
+  width: 3px;
+}
+
+.phoneContent::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.phoneContent::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: 4px;
+}
+
+.phoneContent::-webkit-scrollbar-thumb:hover {
+  background: var(--text-tertiary);
 }

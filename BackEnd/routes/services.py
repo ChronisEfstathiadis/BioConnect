@@ -36,6 +36,16 @@ async def create_service(
     db.refresh(db_service)
     return db_service
 
+@router.get("/api/services/{service_id}", response_model=ServiceResponse, tags=["Services"])
+async def get_service_by_id(
+    service_id: int,
+    db: Session = Depends(get_db)
+):
+    db_service = db.query(Service).filter(Service.id == service_id).first()
+    if not db_service:
+        raise HTTPException(status_code=404, detail="Service not found")
+    return db_service
+
 @router.put("/api/services/{service_id}", response_model=ServiceResponse, tags=["Services"])
 async def update_service(
     service_id: int,

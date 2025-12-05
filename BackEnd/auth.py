@@ -85,9 +85,8 @@ async def verify_token(request: Request = None, credentials: HTTPAuthorizationCr
             issuer=f"https://{AUTH0_DOMAIN}/"
         )
         return payload
-    except jwt.DecodeError as e:
-        raise HTTPException(status_code=401, detail=f"Token decode error: {str(e)}")
     except JWTError as e:
+        # JWTError catches all JWT-related errors including decode errors
         raise HTTPException(status_code=401, detail=f"Invalid token: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=401, detail=f"Token verification error: {str(e)}")

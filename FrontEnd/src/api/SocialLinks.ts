@@ -1,10 +1,9 @@
-import { API_URL } from "../config/api";
-import type { SocialLinksTypes } from "../Types/SocialLinksTypes";
+import { apiFetch } from "../utils/apiClient";
+import type { SocialLinksTypes } from "../types/SocialLinksTypes";
 
 export const getSocialLinks = async (profile_id: string) => {
-  const response = await fetch(`${API_URL}/social-links/${profile_id}`, {
+  const response = await apiFetch(`/social-links/${profile_id}`, {
     method: "GET",
-    credentials: "include",
   });
   if (!response.ok) {
     throw new Error("Failed to fetch social links");
@@ -13,12 +12,8 @@ export const getSocialLinks = async (profile_id: string) => {
 };
 
 export const createSocialLink = async (socialLink: SocialLinksTypes) => {
-  const response = await fetch(`${API_URL}/social-links`, {
+  const response = await apiFetch("/social-links", {
     method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(socialLink),
   });
   if (!response.ok) {
@@ -28,12 +23,8 @@ export const createSocialLink = async (socialLink: SocialLinksTypes) => {
 };
 
 export const updateSocialLink = async (socialLink: SocialLinksTypes) => {
-  const response = await fetch(`${API_URL}/social-links/${socialLink.id}`, {
+  const response = await apiFetch(`/social-links/${socialLink.id}`, {
     method: "PUT",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(socialLink),
   });
   if (!response.ok) {
@@ -43,15 +34,23 @@ export const updateSocialLink = async (socialLink: SocialLinksTypes) => {
 };
 
 export const deleteSocialLink = async (id: number) => {
-  const response = await fetch(`${API_URL}/social-links/${id}`, {
+  const response = await apiFetch(`/social-links/${id}`, {
     method: "DELETE",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
   });
   if (!response.ok) {
     throw new Error("Failed to delete social link");
+  }
+  return response.json();
+};
+
+export const getSocialLinkById = async (
+  id: number
+): Promise<SocialLinksTypes> => {
+  const response = await apiFetch(`/social-links/${id}`, {
+    method: "GET",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch social link");
   }
   return response.json();
 };

@@ -19,6 +19,7 @@ import { Projects } from "../Projects/Projects";
 import { Services } from "../Services/Services";
 import { SocialLinks } from "../SocialLinks/SocialLinks";
 import { Jobs } from "../Job/Job";
+import { logout } from "../../../api/AuthService";
 
 interface LeftViewProps {
   profile: Profile | null;
@@ -182,8 +183,13 @@ export default function LeftView({ profile, onProfileUpdate }: LeftViewProps) {
     }
   };
 
+  const handleLogout = () => {
+    logout();
+  };
+
   return (
     <div className={styles.editorPanel}>
+      <button onClick={handleLogout}>Logout</button>
       <input
         ref={fileInputRef}
         type="file"

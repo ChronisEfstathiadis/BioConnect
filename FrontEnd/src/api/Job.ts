@@ -1,10 +1,9 @@
-import type { Job } from "../Types/JobTypes";
-import { API_URL } from "../config/api";
+import type { Job } from "../types/JobTypes";
+import { apiFetch } from "../utils/apiClient";
 
 export const getJobs = async (profile_id: string): Promise<Job[]> => {
-  const response = await fetch(`${API_URL}/jobs/${profile_id}`, {
+  const response = await apiFetch(`/jobs/${profile_id}`, {
     method: "GET",
-    credentials: "include",
   });
   if (!response.ok) {
     throw new Error("Failed to fetch jobs");
@@ -13,12 +12,8 @@ export const getJobs = async (profile_id: string): Promise<Job[]> => {
 };
 
 export const createJob = async (job: Job): Promise<Job> => {
-  const response = await fetch(`${API_URL}/jobs`, {
+  const response = await apiFetch("/jobs", {
     method: "POST",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(job),
   });
   if (!response.ok) {
@@ -28,12 +23,8 @@ export const createJob = async (job: Job): Promise<Job> => {
 };
 
 export const updateJob = async (job: Job): Promise<Job> => {
-  const response = await fetch(`${API_URL}/jobs/${job.id}`, {
+  const response = await apiFetch(`/jobs/${job.id}`, {
     method: "PUT",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
     body: JSON.stringify(job),
   });
   if (!response.ok) {
@@ -43,15 +34,21 @@ export const updateJob = async (job: Job): Promise<Job> => {
 };
 
 export const deleteJob = async (id: number): Promise<void> => {
-  const response = await fetch(`${API_URL}/jobs/${id}`, {
+  const response = await apiFetch(`/jobs/${id}`, {
     method: "DELETE",
-    credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-    },
   });
   if (!response.ok) {
     throw new Error("Failed to delete job");
+  }
+  return response.json();
+};
+
+export const getJobById = async (id: number): Promise<Job> => {
+  const response = await apiFetch(`/jobs/${id}`, {
+    method: "GET",
+  });
+  if (!response.ok) {
+    throw new Error("Failed to fetch job");
   }
   return response.json();
 };
