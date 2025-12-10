@@ -165,22 +165,26 @@ export const PublicProfile = () => {
             <div className={styles.projectsList}>
               {profile.projects.map((project: Project) => (
                 <div key={project.id} className={styles.projectItem}>
-                  <div className={styles.projectHeader}>
-                    <h3 className={styles.itemTitle}>{project.title}</h3>
-                    {project.project_link && (
-                      <a
-                        href={project.project_link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={styles.projectLink}>
-                        <FaExternalLinkAlt />
-                      </a>
-                    )}
-                  </div>
-                  {project.description && (
-                    <p className={styles.itemDescription}>
-                      {project.description}
-                    </p>
+                  {!project.IsAppear && (
+                    <>
+                      <div className={styles.projectHeader}>
+                        <h3 className={styles.itemTitle}>{project.title}</h3>
+                        {project.project_link && (
+                          <a
+                            href={project.project_link}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className={styles.projectLink}>
+                            <FaExternalLinkAlt />
+                          </a>
+                        )}
+                      </div>
+                      {project.description && (
+                        <p className={styles.itemDescription}>
+                          {project.description}
+                        </p>
+                      )}
+                    </>
                   )}
                 </div>
               ))}

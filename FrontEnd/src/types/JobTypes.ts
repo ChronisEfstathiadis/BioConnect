@@ -3,5 +3,5 @@ export type Job = {
   profile_id: string;
   title: string;
   description: string;
-  appear: boolean;
+  IsAppear: boolean;
 };

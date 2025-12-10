@@ -27,6 +27,7 @@ export interface Job {
   description: string;
   id: number;
   profile_id: string;
+  IsAppear: boolean;
 }
 
 export interface Service {
@@ -35,6 +36,7 @@ export interface Service {
   sort_order: number;
   id: number;
   profile_id: string;
+  IsAppear: boolean;
 }
 
 export interface Project {
@@ -44,6 +46,7 @@ export interface Project {
   sort_order: number;
   id: number;
   profile_id: string;
+  IsAppear: boolean;
 }
 
 export interface SocialLink {
@@ -51,4 +54,5 @@ export interface SocialLink {
   url: string;
   id: number;
   profile_id: string;
+  IsAppear: boolean;
 }

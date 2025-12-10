@@ -4,4 +4,5 @@ export interface Service {
   title: string;
   description?: string;
   sort_order?: number;
+  IsAppear: boolean;
 }

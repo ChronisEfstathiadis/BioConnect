@@ -26,22 +26,17 @@ def get_jwks():
 def get_token_from_request(request: Request) -> Optional[str]:
     """Get token from HTTP-only cookie first, then from Authorization header as fallback"""
     # Debug: Print all cookies
-    print(f"All cookies received: {request.cookies}")
-    print(f"Cookie 'access_token': {request.cookies.get('access_token')}")
     
     # Priority 1: HTTP-only cookie (most secure)
     token = request.cookies.get("access_token")
     if token:
-        print("Token found in cookie!")
         return token
     
     # Priority 2: Authorization header (fallback for API clients)
     auth_header = request.headers.get("Authorization")
     if auth_header and auth_header.startswith("Bearer "):
-        print("Token found in Authorization header")
         return auth_header.split(" ")[1]
     
-    print("No token found!")
     return None
 
 async def verify_token(request: Request = None, credentials: HTTPAuthorizationCredentials = None):
@@ -124,36 +119,29 @@ def get_user_id_from_token(token_data: dict) -> str:
 def get_user_email_from_token(token_data: dict) -> str:
     """Extract user email from Auth0 token"""
     email = token_data.get("email", "")
-    print(f"🔍 Extracting email: '{email}'")
     return email
 
 def get_user_name_from_token(token_data: dict) -> tuple[str, str]:
     """Extract user name from Auth0 token/userinfo and split into first/last"""
     # Debug: Print what we're receiving
-    print(f"🔍 Extracting name from token_data keys: {list(token_data.keys())}")
     
     # Try given_name and family_name first (from /userinfo endpoint)
     given_name = token_data.get("given_name", "")
     family_name = token_data.get("family_name", "")
     
-    print(f"   given_name: '{given_name}', family_name: '{family_name}'")
     
     if given_name or family_name:
         result = (given_name or "", family_name or "")
-        print(f"   ✅ Using given_name/family_name: {result}")
         return result
     
     # Fallback to name field
     name = token_data.get("name", "")
-    print(f"   name field: '{name}'")
     
     if name:
         parts = name.split(" ", 1)
         result = (parts[0], parts[1] if len(parts) > 1 else "")
-        print(f"   ✅ Using name field (split): {result}")
         return result
     
-    print(f"   ⚠️ No name found in token data")
     return ("", "")
 
 def get_or_create_profile(token_data: dict, db: Session) -> Profile:
@@ -163,25 +151,12 @@ def get_or_create_profile(token_data: dict, db: Session) -> Profile:
     if not user_id:
         raise ValueError("User ID (sub) not found in token/userinfo data")
     
-    print(f"\n🔍 Looking for profile with user_id: {user_id}")
     profile = db.query(Profile).filter(Profile.id == user_id).first()
     
     if not profile:
         # Extract data BEFORE creating profile
         email = get_user_email_from_token(token_data)
-        first_name, last_name = get_user_name_from_token(token_data)
-        
-        print(f"\n📝 CREATING NEW PROFILE:")
-        print(f"   User ID: {user_id}")
-        print(f"   Email: '{email}'")
-        print(f"   First Name: '{first_name}'")
-        print(f"   Last Name: '{last_name}'")
-        
-        # Verify we have the data
-        if not email:
-            print(f"   ⚠️ WARNING: Email is empty!")
-        if not first_name and not last_name:
-            print(f"   ⚠️ WARNING: Both first and last name are empty!")
+        first_name, last_name = get_user_name_from_token(token_data)        
         
         profile = Profile(
             id=user_id,
@@ -192,28 +167,12 @@ def get_or_create_profile(token_data: dict, db: Session) -> Profile:
             phone=None
         )
         
-        print(f"   Profile object created:")
-        print(f"     - id: {profile.id}")
-        print(f"     - email: {profile.email}")
-        print(f"     - FirstName: '{profile.FirstName}'")
-        print(f"     - LastName: '{profile.LastName}'")
-        
         db.add(profile)
         db.commit()
         db.refresh(profile)
-        
-        print(f"\n✅ Profile saved to database:")
-        print(f"   ID: {profile.id}")
-        print(f"   Email: {profile.email}")
-        print(f"   FirstName: '{profile.FirstName}'")
-        print(f"   LastName: '{profile.LastName}'")
-    else:
-        print(f"✅ Profile already exists for user: {user_id}")
-        print(f"   Current - Email: {profile.email}, Name: {profile.FirstName} {profile.LastName}")
-        
+
         # If profile exists but is empty, update it
         if not profile.email or (not profile.FirstName and not profile.LastName):
-            print(f"   ⚠️ Profile exists but is missing data. Updating...")
             email = get_user_email_from_token(token_data)
             first_name, last_name = get_user_name_from_token(token_data)
             
@@ -226,9 +185,5 @@ def get_or_create_profile(token_data: dict, db: Session) -> Profile:
             
             db.commit()
             db.refresh(profile)
-            print(f"   ✅ Profile updated:")
-            print(f"     - Email: {profile.email}")
-            print(f"     - FirstName: '{profile.FirstName}'")
-            print(f"     - LastName: '{profile.LastName}'")
     
     return profile

@@ -4,7 +4,7 @@ import styles from "./Job.module.css";
 interface FormData {
   title: string;
   description: string;
-  appear: boolean;
+  IsAppear: boolean;
 }
 
 export const JobModalForm = ({
@@ -17,7 +17,7 @@ export const JobModalForm = ({
   const [formData, setFormData] = useState<FormData>({
     title: "",
     description: "",
-    appear: true,
+    IsAppear: false,
   });
 
   const handleInputChange = (
@@ -71,13 +71,13 @@ export const JobModalForm = ({
 
         <div className={styles.formGroup}>
           <label htmlFor="appear" className={styles.label}>
-            Appear
+            Appear in Portfolio
           </label>
           <input
-            type="color"
+            type="checkbox"
             id="appear"
-            name="appear"
-            value={formData.appear ? "true" : "false"}
+            name="IsAppear"
+            value={formData.IsAppear ? "true" : "false"}
             onChange={handleInputChange}
             className={styles.checkbox}
           />
@@ -88,7 +88,7 @@ export const JobModalForm = ({
             type="button"
             onClick={() => {
               setIsModalOpen(false);
-              setFormData({ title: "", description: "", appear: true });
+              setFormData({ title: "", description: "", IsAppear: false });
             }}
             className={styles.cancelButton}>
             Cancel

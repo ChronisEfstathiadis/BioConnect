@@ -24,7 +24,6 @@ async def get_my_profile(
     """Get current user's profile - auto-creates if doesn't exist"""
     try:
         profile = get_or_create_profile(token_data, db)
-        print(f"🔍 Profile: {profile}")
         return profile
         
     except ValueError as e:
@@ -33,7 +32,6 @@ async def get_my_profile(
             detail=f"Invalid user data: {str(e)}"
         )
     except Exception as e:
-        print(f"❌ Error getting profile: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get profile: {str(e)}"
@@ -68,7 +66,6 @@ async def get_profile(
     except HTTPException:
         raise
     except Exception as e:
-        print(f"❌ Error getting profile: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to get profile: {str(e)}"
@@ -117,7 +114,6 @@ async def create_profile(
         raise
     except Exception as e:
         db.rollback()
-        print(f"❌ Error creating profile: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to create profile: {str(e)}"
@@ -158,7 +154,6 @@ async def update_profile(
         raise
     except Exception as e:
         db.rollback()
-        print(f"❌ Error updating profile: {e}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to update profile: {str(e)}"
@@ -193,8 +188,7 @@ async def delete_profile(
                 if os.path.exists(avatar_path):
                     os.remove(avatar_path)
             except Exception as e:
-                print(f"⚠️ Warning: Could not delete avatar file: {e}")
-        
+                pass
         db.delete(db_profile)
         db.commit()
         return {"message": "Profile deleted successfully"}
@@ -202,7 +196,7 @@ async def delete_profile(
         raise
     except Exception as e:
         db.rollback()
-        print(f"❌ Error deleting profile: {e}")
+
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
             detail=f"Failed to delete profile: {str(e)}"
@@ -223,7 +217,6 @@ async def upload_avatar(
         
         user_id = get_user_id_from_token(token_data)
         
-        print(f"🔍 Avatar upload - profile_id: {profile_id}, user_id: {user_id}")
         
         if profile_id != user_id:
             raise HTTPException(
@@ -266,7 +259,6 @@ async def upload_avatar(
         upload_dir = Path("uploads/avatars").resolve()
         upload_dir.mkdir(parents=True, exist_ok=True)
         
-        print(f"📁 Upload directory: {upload_dir}")
         
         # Generate unique filename: user_id + uuid + extension
         # Replace | with _ in filename for filesystem compatibility
@@ -274,7 +266,6 @@ async def upload_avatar(
         unique_filename = f"{safe_user_id}_{uuid.uuid4().hex[:8]}{file_ext}"
         file_path = upload_dir / unique_filename
         
-        print(f"💾 Saving file to: {file_path}")
         
         # Delete old avatar if exists
         if db_profile.avatar_url:
@@ -286,7 +277,6 @@ async def upload_avatar(
                     old_path = upload_dir / old_filename
                     if old_path.exists():
                         old_path.unlink()
-                        print(f"🗑️ Deleted old avatar: {old_filename}")
             except Exception as e:
                 print(f"⚠️ Warning: Could not delete old avatar: {e}")
         
@@ -294,9 +284,7 @@ async def upload_avatar(
         try:
             with open(file_path, "wb") as f:
                 f.write(contents)
-            print(f"✅ File saved successfully: {file_path}")
         except Exception as e:
-            print(f"❌ Error saving file: {e}")
             import traceback
             traceback.print_exc()
             raise HTTPException(
@@ -310,14 +298,12 @@ async def upload_avatar(
         db.commit()
         db.refresh(db_profile)
         
-        print(f"✅ Avatar URL updated: {avatar_url}")
         
         return {"avatarUrl": avatar_url, "message": "Avatar uploaded successfully"}
     except HTTPException:
         raise
     except Exception as e:
         db.rollback()
-        print(f"❌ Error uploading avatar: {e}")
         import traceback
         traceback.print_exc()
         raise HTTPException(

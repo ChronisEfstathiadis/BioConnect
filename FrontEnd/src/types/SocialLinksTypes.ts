@@ -3,4 +3,5 @@ export interface SocialLinksTypes {
   profile_id: string;
   platform: string;
   url: string;
+  IsAppear: boolean;
 }

@@ -5,6 +5,7 @@ export interface FormData {
   title: string;
   description: string;
   project_link: string;
+  IsAppear: boolean;
 }
 
 export const ModalForm = ({
@@ -18,6 +19,7 @@ export const ModalForm = ({
     title: "",
     description: "",
     project_link: "",
+    IsAppear: false,
   });
 
   const handleInputChange = (
@@ -86,12 +88,32 @@ export const ModalForm = ({
           />
         </div>
 
+        <div className={styles.formGroup}>
+          <label htmlFor="appear" className={styles.label}>
+            {" "}
+            Appear in Portfolio{" "}
+          </label>
+          <input
+            type="checkbox"
+            id="appear"
+            name="IsAppear"
+            value={formData.IsAppear ? "true" : "false"}
+            onChange={handleInputChange}
+            className={styles.checkbox}
+          />
+        </div>
+
         <div className={styles.formActions}>
           <button
             type="button"
             onClick={() => {
               setIsModalOpen(false);
-              setFormData({ title: "", description: "", project_link: "" });
+              setFormData({
+                title: "",
+                description: "",
+                project_link: "",
+                IsAppear: false,
+              });
             }}
             className={styles.cancelButton}>
             Cancel
