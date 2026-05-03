@@ -7,11 +7,15 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Docker
+docker-compose.yml
+
 node_modules
 dist
 dist-ssr
 *.local
 .env
+uploads
 
 # Editor directories and files
 .vscode/*
@@ -24,9 +28,3 @@ dist-ssr
 *.sln
 *.sw?
 .env
-
-.venv
-__pycache__/
-
-uploads/
-*.db
